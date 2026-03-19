@@ -8,7 +8,12 @@ class LithiumAgent:
         self.epsilon = 0.2
 
     def get_state(self, signal):
-        return int(min(max(abs(signal.mean()) * 2, 0), 9))
+      signal = np.nan_to_num(signal, nan=0.0, posinf=1e6, neginf=-1e6)
+
+      mean_val = signal.mean()
+      state = int(np.clip(abs(mean_val) * 2, 0, 9))
+
+      return state
 
     def choose_action(self, state):
         if np.random.rand() < self.epsilon:
